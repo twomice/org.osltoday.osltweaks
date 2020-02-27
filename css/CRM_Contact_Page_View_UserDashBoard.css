@@ -1,0 +1,9 @@
+/* JS has added some classes tha leverages WP theme styles, including a class 
+ * ('menu-toggle') which uses the :before pseudo-class to prepend an icon. 
+ * (See js/CRM_Contact_Page_View_UserDashBoard.js)
+ * Here we specify styles that specifically omit that :before content.
+ */
+tr.crm-dashboard-civimember a:before {
+  content: none !important;
+}
+                                      
