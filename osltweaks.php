@@ -4,6 +4,22 @@ require_once 'osltweaks.civix.php';
 use CRM_Osltweaks_ExtensionUtil as E;
 
 /**
+ * Implements hook_civicrm_buildForm().
+ *
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_buildForm/
+ */
+function osltweaks_civicrm_buildForm($formName, &$form) {
+  if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
+    $showCMS = CRM_Core_Smarty::singleton()->get_template_vars('showCMS');
+    if ($showCMS) {
+      // On contribution pages where users would see cms-user-help section,
+      // include some javascript to finagle the wording in that section.
+      CRM_Core_Resources::singleton()->addScriptFile('org.osltoday.osltweaks', 'js/CRM_Contribute_Form_Contribution_Main-isShowCMS.js');
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_pageRun().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_pageRun/
@@ -82,7 +98,7 @@ function _osltweaks_addCoreResources($region, $types = ['settings', 'css', 'js']
 /**
  * Implements hook_civicrm_config().
  *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/ 
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
  */
 function osltweaks_civicrm_config(&$config) {
   _osltweaks_civix_civicrm_config($config);
@@ -216,31 +232,3 @@ function osltweaks_civicrm_entityTypes(&$entityTypes) {
 function osltweaks_civicrm_themes(&$themes) {
   _osltweaks_civix_civicrm_themes($themes);
 }
-
-// --- Functions below this ship commented out. Uncomment as required. ---
-
-/**
- * Implements hook_civicrm_preProcess().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_preProcess
- *
-function osltweaks_civicrm_preProcess($formName, &$form) {
-
-} // */
-
-/**
- * Implements hook_civicrm_navigationMenu().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
- *
-function osltweaks_civicrm_navigationMenu(&$menu) {
-  _osltweaks_civix_insert_navigation_menu($menu, 'Mailings', array(
-    'label' => E::ts('New subliminal message'),
-    'name' => 'mailing_subliminal_message',
-    'url' => 'civicrm/mailing/subliminal',
-    'permission' => 'access CiviMail',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _osltweaks_civix_navigationMenu($menu);
-} // */
