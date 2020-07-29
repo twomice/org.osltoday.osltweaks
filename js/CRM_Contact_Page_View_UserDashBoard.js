@@ -19,7 +19,7 @@
   })
 
   // Change renew button link to match the users current membership type
-  $(window).load(function(){
+  $(document).ready(function(){
     $('.form-item .secondary-navigation').each(function(){
       // Get the membership type
       var memberShipType = $(this).parent('td').parent('tr').find('td:first-child').html();
