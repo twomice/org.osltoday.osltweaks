@@ -20,30 +20,30 @@
 
   // Change renew button link to match the users current membership type
   $(window).load(function(){
-    // Get the membership type
-    var memberShipType = $('#memberships').find('.form-item table tbody tr:not(.columnheader) td:first-child').html();
-    if(
-      memberShipType === 'New Discerning Member - 1 year (CANADA)'
-      || memberShipType === 'New Discerning Couple Member - 1 year (CANADA)'
-      || memberShipType === 'Individual Member - 1 year (Canada Renewal)'
-      || memberShipType === 'Couple Member - 1 year (Canada Renewal)'
-    ) {
-      $('table .secondary-navigation a').each(function(){
-          var newHref = $(this).attr('href').replace('id=10', 'id=14');
-          $(this).attr('href', newHref);
-      });
+    $('.form-item .secondary-navigation').each(function(){
+      // Get the membership type
+      var memberShipType = $(this).parent('td').parent('tr').find('td:first-child').html();
+      var newHref;
 
-    } else if(
-      memberShipType === 'New Discerning Member - 1 year (INTERNATIONAL)'
-      || memberShipType === 'New Discerning Couple Member - 1 year (INTERNATIONAL)'
-      || memberShipType === 'Individual Member - 1 year (International Renewal)'
-      || memberShipType === 'Couple Member - 1 year (International Renewal)'
-    ) {
-      $('table .secondary-navigation a').each(function(){
-          var newHref = $(this).attr('href').replace('id=10', 'id=15');
-          $(this).attr('href', newHref);
-      });
-    }
+      if(
+        memberShipType === 'New Discerning Member - 1 year (CANADA)'
+        || memberShipType === 'New Discerning Couple Member - 1 year (CANADA)'
+        || memberShipType === 'Individual Member - 1 year (Canada Renewal)'
+        || memberShipType === 'Couple Member - 1 year (Canada Renewal)'
+      ) {
+        newHref = $('a', this).attr('href').replace('id=10', 'id=14');
+        $('a', this).attr('href', newHref);
+      } else if(
+        memberShipType === 'New Discerning Member - 1 year (INTERNATIONAL)'
+        || memberShipType === 'New Discerning Couple Member - 1 year (INTERNATIONAL)'
+        || memberShipType === 'Individual Member - 1 year (International Renewal)'
+        || memberShipType === 'Couple Member - 1 year (International Renewal)'
+      ) {
+        newHref = $('a', this).attr('href').replace('id=10', 'id=15');
+        $('a', this).attr('href', newHref);
+      }
+
+    });
   });
   
 })(CRM.$, CRM.ts('com.joineryhq.profcond'));
