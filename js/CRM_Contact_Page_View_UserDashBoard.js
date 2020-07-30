@@ -31,7 +31,7 @@
         || memberShipType === 'Individual Member - 1 year (Canada Renewal)'
         || memberShipType === 'Couple Member - 1 year (Canada Renewal)'
       ) {
-        newHref = $('a', this).attr('href').replace('id=10', 'id=14');
+        newHref = $('a', this).attr('href').replace(/\bid=10\b/g, 'id=14');
         $('a', this).attr('href', newHref);
       } else if(
         memberShipType === 'New Discerning Member - 1 year (INTERNATIONAL)'
@@ -39,7 +39,7 @@
         || memberShipType === 'Individual Member - 1 year (International Renewal)'
         || memberShipType === 'Couple Member - 1 year (International Renewal)'
       ) {
-        newHref = $('a', this).attr('href').replace('id=10', 'id=15');
+        newHref = $('a', this).attr('href').replace(/\bid=10\b/g, 'id=15');
         $('a', this).attr('href', newHref);
       }
 
