@@ -16,6 +16,28 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
       // include some javascript to finagle the wording in that section.
       CRM_Core_Resources::singleton()->addScriptFile('org.osltoday.osltweaks', 'js/CRM_Contribute_Form_Contribution_Main-isShowCMS.js');
     }
+
+    // Show US only in Country and 
+    // Rewrite State/Province label to State if Contribution page is for US
+    $settings = CRM_Core_BAO_Setting::getItem(NULL, 'com.joineryhq.osltweaks');
+    foreach ($settings['page_ids'] as $key => $id) {
+      if ($id == $_GET['id']) {
+        if ($form->elementExists('state_province-1')) {
+          $elements = $form->getElement('state_province-1');
+          $elements->_label = 'State';
+        }
+
+        if ( $form->elementExists( 'country-1' ) ) {
+          $elements = & $form->getElement('country-1');
+          $options = & $elements->_options;
+          foreach ($options as $key => $option) {
+            if ( $option['attr']['value'] != 1228 ) {
+              unset($options[$key]);
+            }
+          }
+        }
+      }
+    }
   }
 }
 
