@@ -17,23 +17,30 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
       CRM_Core_Resources::singleton()->addScriptFile('org.osltoday.osltweaks', 'js/CRM_Contribute_Form_Contribution_Main-isShowCMS.js');
     }
 
-    // Show US only in Country and 
-    // Rewrite State/Province label to State if Contribution page is for US
+    // Array of Contribution page id for the Country and State rewrite
     $settings = CRM_Core_BAO_Setting::getItem(NULL, 'com.joineryhq.osltweaks');
-    foreach ($settings['page_ids'] as $key => $id) {
-      if ($id == $_GET['id']) {
-        if ($form->elementExists('state_province-1')) {
-          $elements = $form->getElement('state_province-1');
-          $elements->_label = 'State';
-        }
 
+    foreach ($settings['page_ids'] as $key => $id) {
+      // Check if contribution page id is match on the $settings and make changes
+      if ($id == $_GET['id']) {
         if ( $form->elementExists( 'country-1' ) ) {
-          $elements = & $form->getElement('country-1');
-          $options = & $elements->_options;
-          foreach ($options as $key => $option) {
+          // Remove other Country and show only US
+          $elCountry = & $form->getElement('country-1');
+          $elCountryOptions = & $elCountry->_options;
+          foreach ($elCountryOptions as $key => $option) {
             if ( $option['attr']['value'] != 1228 ) {
-              unset($options[$key]);
+              unset($elCountryOptions[$key]);
             }
+          }
+
+          // Rewrite State/Country label to State
+          $elState = & $form->getElement('state_province-1');
+          $elState->_label = 'State';
+
+          // Set Country to US and delete value of State if its US Contribution and User Country is not
+          if ($elCountry->_values[0] != 1228) {
+            $elCountry->_values[0] = 1228;
+            unset($elState->_values[0]);
           }
         }
       }
