@@ -22,12 +22,12 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
 
     // Check if contribution page id is match on the $settings and make changes
     if (in_array($form->_id, $settings['us_only_page_ids'])) {
-      if ( $form->elementExists( 'country-1' ) ) {
+      if ($form->elementExists('country-1')) {
         // Remove other Country and show only US
         $elCountry = $form->getElement('country-1');
         $elCountryOptions = & $elCountry->_options;
         foreach ($elCountryOptions as $key => $option) {
-          if ( $option['attr']['value'] != 1228 ) {
+          if ($option['attr']['value'] != 1228) {
             unset($elCountryOptions[$key]);
           }
         }
