@@ -55,72 +55,41 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
 function osltweaks_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
   if ($pageName == 'CRM_Contact_Page_View_UserDashBoard') {
-    // add CiviCRM core resources (use our own function, so we cqn avoid
-    // loading civicrm css.
-    _osltweaks_addCoreResources('page-footer', ['js', 'settings']);
-    CRM_Core_Resources::singleton()->addScriptFile('org.osltoday.osltweaks', 'js/CRM_Contact_Page_View_UserDashBoard.js');
-    CRM_Core_Resources::singleton()->addStyleFile('org.osltoday.osltweaks', 'css/CRM_Contact_Page_View_UserDashBoard.css');
+    // add CiviCRM core resources.
+    _osltweaks_addCoreResources();
+    $resource = CRM_Core_Resources::singleton();
+    $resource->addScriptFile('org.osltoday.osltweaks', 'js/CRM_Contact_Page_View_UserDashBoard.js');
+    $resource->addStyleFile('org.osltoday.osltweaks', 'css/CRM_Contact_Page_View_UserDashBoard.css');
   }
 }
 
 /**
- * Copied from CRM_Core_Resources::addCoreResources(), modified to allow including
- * only some core resources (e.g., exclude css)
- *
- * @param string $region
- *   location within the file; 'html-header', 'page-header', 'page-footer'.
- * * @param array $types Which resources to add: any of 'css', 'settings, 'js'
+ * Because User Dashboard shortcode doesn't addCoreResources (reference
+ * https://lab.civicrm.org/dev/wordpress/-/issues/97) we have to include the
+ * necessary resources manually.
  */
-function _osltweaks_addCoreResources($region, $types = ['settings', 'css', 'js']) {
+function _osltweaks_addCoreResources() {
   $resource = CRM_Core_Resources::singleton();
-  // Skip this, because it may prevent CRM_Core_Resources::addCoreResources()
-  // from actually adding all resources if called from another context.
-  //
-  // $resource->addedCoreResources[$region] = TRUE;
-
-  // Add resources from coreResourceList
-  $jsWeight = -9999;
-  foreach ($resource->coreResourceList($region) as $item) {
-    if (is_array($item) && in_array('settings', $types)) {
-      $resource->addSetting($item);
+  $items = [
+    "js/noconflict.js",
+    "bower_components/jquery/dist/jquery.js",
+    "bower_components/jquery-ui/jquery-ui.js",
+    "bower_components/lodash-compat/lodash.js",
+  ];
+  foreach ($items as $item) {
+    if (substr($item, -4) == '.css') {
+      $resource->addStyleFile('civicrm', $item, [
+        'weight' => 9999,
+        'translate' => FALSE,
+      ]);
     }
-    elseif (strpos($item, '.css') && in_array('css', $types)) {
-      $resource->isFullyFormedUrl($item) ? $resource->addStyleUrl($item, -100, $region) : $resource->addStyleFile('civicrm', $item, -100, $region);
+    else {
+      $resource->addScriptFile('civicrm', $item, [
+        'weight' => 9999,
+        'translate' => FALSE,
+      ]);
     }
-    elseif (in_array('js', $types) && $resource->isFullyFormedUrl($item)) {
-      $resource->addScriptUrl($item, $jsWeight++, $region);
-    }
-    elseif (in_array('js', $types)) {
-      // Don't bother  looking for ts() calls in packages, there aren't any
-      $translate = (substr($item, 0, 3) == 'js/');
-      $resource->addScriptFile('civicrm', $item, $jsWeight++, $region, $translate);
-    }
-  }
-
-  if (in_array('settings', $types)) {
-    $config = CRM_Core_Config::singleton();
-    // Add global settings
-    $settings = [
-      'config' => [
-        'isFrontend' => $config->userFrameworkFrontend,
-      ],
-    ];
-    // Disable profile creation if user lacks permission
-    if (!CRM_Core_Permission::check('edit all contacts') && !CRM_Core_Permission::check('add contacts')) {
-      $settings['config']['entityRef']['contactCreate'] = FALSE;
-    }
-    $resource->addSetting($settings);
-  }
-
-  if (in_array('js', $types)) {
-    // Give control of jQuery and _ back to the CMS - this loads last
-    $resource->addScriptFile('civicrm', 'js/noconflict.js', 9999, $region, FALSE);
-  }
-
-  if (in_array('css', $types)) {
-    $resource->addCoreStyles($region);
-  }
-
+  }    
 }
 
 /**
