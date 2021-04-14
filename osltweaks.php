@@ -44,6 +44,25 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
         }
       }
     }
+
+    // If contribution page id exist in $settings['member_redirect_contribution_pages'] array
+    if (array_key_exists($form->_id, ($settings['member_redirect_contribution_pages'] ?? array()))) {
+      // Get current contact id
+      $currentContactId = CRM_Core_Session::singleton()->getLoggedInContactID();
+      // Get memberships count base on the current contact id
+      $membershipCount = civicrm_api3('Membership', 'getcount', [
+        'contact_id' => $currentContactId,
+      ]);
+
+      // Redirect if there are results on memberships api
+      if ($membershipCount) {
+        // Parse current URL to get the current q
+        parse_str(html_entity_decode(parse_url($form->controller->_entryURL, PHP_URL_QUERY)), $parseDecodedUrl);
+        // Get the redirect id in $settings['member_redirect_contribution_pages'] base on $form->_id
+        $redirectFormId = $settings['member_redirect_contribution_pages'][$form->_id];
+        CRM_Utils_System::redirect(CRM_Utils_System::url($parseDecodedUrl['q'], "reset=1&id={$redirectFormId}"));
+      }
+    }
   }
 }
 
