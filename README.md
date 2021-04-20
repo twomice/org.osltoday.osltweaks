@@ -27,3 +27,27 @@ $civicrm_setting['com.joineryhq.osltweaks']['com.joineryhq.osltweaks']['us_only_
   21
 );
 ```
+
+## Specifying contribution pages as membership renewal alternatives to the original contribution page.
+
+When properly configured, this feature will cause a logged-in user to be redirected to a specific contribution page "X", if they a) have a membership record (of any status or type), and b) attempt to access a specific contribution page "Y".
+
+For example, a user with an existing membership record will often find on their CiviCRM user dashboard a link to "Renew Membership" at the contribution page at which they originally signed up (e.g., contribution page id=1); this feature allows the site admin to configure an alternative contribution page for renewal, so that this user is redirected to that page (e.g. contribution page id=10).
+
+This configuration is to be made in civicrm.settings.php, as there is no UI for this at present. To specify the configuration for this feature, add code like the following to civicrm.settings.php:
+
+```
+$civicrm_setting['com.joineryhq.osltweaks']['com.joineryhq.osltweaks']['member_redirect_contribution_pages'] = array(
+  Y => X, // When a user with an existing membership record attempts to access contribution page id=Y, 
+          // redirect them to contribution page id=X.
+);
+```
+
+For example:
+```
+$civicrm_setting['com.joineryhq.osltweaks']['com.joineryhq.osltweaks']['member_redirect_contribution_pages'] = array(
+  1 => 10,
+  2 => 11,
+  22 => 11, // Notice that both 2 and 22 are redirected to 11.
+);
+```
