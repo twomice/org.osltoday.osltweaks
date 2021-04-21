@@ -45,10 +45,12 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
       }
     }
 
-    // If contribution page id exist in $settings['member_redirect_contribution_pages'] array
-    if (array_key_exists($form->_id, ($settings['member_redirect_contribution_pages'] ?? array()))) {
-      // Get current contact id
-      $currentContactId = CRM_Core_Session::singleton()->getLoggedInContactID();
+    // If contribution page id exist in $settings['member_redirect_contribution_pages'] array,
+    // and if we can get current contact id (user is logged in).
+    if (
+      array_key_exists($form->_id, ($settings['member_redirect_contribution_pages'] ?? array()))
+      && $currentContactId = CRM_Core_Session::singleton()->getLoggedInContactID()
+    ) {
       // Get memberships count base on the current contact id
       $membershipCount = civicrm_api3('Membership', 'getcount', [
         'contact_id' => $currentContactId,
