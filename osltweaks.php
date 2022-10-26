@@ -81,6 +81,11 @@ function osltweaks_civicrm_pageRun(&$page) {
     $resource = CRM_Core_Resources::singleton();
     $resource->addScriptFile('org.osltoday.osltweaks', 'js/CRM_Contact_Page_View_UserDashBoard.js');
     $resource->addStyleFile('org.osltoday.osltweaks', 'css/CRM_Contact_Page_View_UserDashBoard.css');
+
+    // Get memberships for this contact and pass relevant data to js settings.
+    $memberships = civicrm_api3('Membership', 'get', ['contact_id' => $page->_contactId]);
+    $settings = ['memberships' => $memberships['values']];
+    $resource->addVars('osltweaks', $settings);
   }
 }
 

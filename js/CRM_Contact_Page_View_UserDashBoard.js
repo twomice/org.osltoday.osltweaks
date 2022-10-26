@@ -18,28 +18,43 @@ CRM.$(function($) {
     $(el).html(html);
   });
 
-  // Change renew button link to match the users current membership type
+  // Change renew button appropriately:
+  //   - first remove the button if the membership expire is !< 60 days in future.
+  //   - if button still exists, change its href to match the row membership type
+  var futureLimitMilliseconds = (Date.now() + (86400000 * 60)); // 60 days from now.
   $('.form-item .secondary-navigation').each(function(){
     // Get the membership type
     var memberShipType = $(this).parent('td').parent('tr').find('td:first-child').html();
-    var newHref;
-
-    if(
-      memberShipType === 'New Discerning Member - 1 year (CANADA)' || 
-      memberShipType === 'New Discerning Couple Member - 1 year (CANADA)' || 
-      memberShipType === 'Individual Member - 1 year (Canada Renewal)' || 
-      memberShipType === 'Couple Member - 1 year (Canada Renewal)'
-    ) {
-      newHref = $('a', this).attr('href').replace(/\bid=10\b/g, 'id=14');
-      $('a', this).attr('href', newHref);
-    } else if(
-      memberShipType === 'New Discerning Member - 1 year (INTERNATIONAL)' || 
-      memberShipType === 'New Discerning Couple Member - 1 year (INTERNATIONAL)' || 
-      memberShipType === 'Individual Member - 1 year (International Renewal)' || 
-      memberShipType === 'Couple Member - 1 year (International Renewal)'
-    ) {
-      newHref = $('a', this).attr('href').replace(/\bid=10\b/g, 'id=15');
-      $('a', this).attr('href', newHref);
+    // Get the membership exire date
+    var membershipId = $(this).parent('td').parent('tr').attr('id').replace(/^row_/, '');
+    var expDateMilliseconds = Date.parse(CRM.vars.osltweaks.memberships[membershipId].end_date);
+    if (expDateMilliseconds > futureLimitMilliseconds) {
+      // If expiration date is more than 60 days in future, hide the button.
+      $(this).hide();
     }
+    else {
+      // If we're still here, change the button href to match the membership type.
+      var newHref;
+
+      if(
+        memberShipType === 'New Discerning Member - 1 year (CANADA)' ||
+        memberShipType === 'New Discerning Couple Member - 1 year (CANADA)' ||
+        memberShipType === 'Individual Member - 1 year (Canada Renewal)' ||
+        memberShipType === 'Couple Member - 1 year (Canada Renewal)'
+      ) {
+        newHref = $('a', this).attr('href').replace(/\bid=10\b/g, 'id=14');
+        $('a', this).attr('href', newHref);
+      } else if(
+        memberShipType === 'New Discerning Member - 1 year (INTERNATIONAL)' ||
+        memberShipType === 'New Discerning Couple Member - 1 year (INTERNATIONAL)' ||
+        memberShipType === 'Individual Member - 1 year (International Renewal)' ||
+        memberShipType === 'Couple Member - 1 year (International Renewal)'
+      ) {
+        newHref = $('a', this).attr('href').replace(/\bid=10\b/g, 'id=15');
+        $('a', this).attr('href', newHref);
+      }
+    }
+
+
   });
 });
