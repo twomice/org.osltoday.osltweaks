@@ -3,6 +3,52 @@
 require_once 'osltweaks.civix.php';
 use CRM_Osltweaks_ExtensionUtil as E;
 
+function osltweaks_civicrm_dashboard( $contactID, &$contentPlacement = self::DASHBOARD_BELOW ) {
+  // Insert some HTML code which used to be in overridden templates, as found on the live site.
+  $content = array(
+    'CiviCRM Quick Links' => '
+      <div>
+        <div style="float:left" class="container1"> <ul class="indented">
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/dashboard&reset=1">CiviCRM Home</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/search&reset=1">Find Contacts</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/group&reset=1">Manage Groups</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/import/contact&reset=1">Import</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contribute&reset=1">CiviContribute</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/pledge&reset=1">CiviPledge</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/mailing/send&reset=1">CiviMail</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/member&reset=1">CiviMember</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/event&reset=1">CiviEvent</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/report/list&reset=1">CiviReport</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/admin&reset=1">Administer CiviCRM</a></li>
+
+          </ul>
+        </div>
+
+        <div style="float:left" class="container2">
+          <ul>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/add&reset=1&ct=Individual" accesskey="I">New Individual</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/add&reset=1&ct=Organization" accesskey="O">New Organization</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/add&reset=1&ct=Household" accesskey="H">New Household</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/activity&reset=1&action=add&context=standalone" accesskey="A">New Activity</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/group/add&reset=1" accesskey="G">New Group</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/user&reset=1" accesskey="">My Contact Dashboard</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/search/custom&csid=26&reset=1">Search For New Members</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/search/custom&csid=22&reset=1">Sharing Magazine Subscriber List</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/search/custom&csid=23&reset=1">Gift membership/Pending status</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/search/custom&csid=24&reset=1">Gift membership Contacts</a></li>
+            <li class="collapsed"><a href="?page=CiviCRM&q=civicrm/contact/search/custom&csid=25&reset=1">Membership Expired Status</a></li>
+          </ul>
+        </div>
+
+
+      </div>
+      <div class="clear"></div>
+
+    ',
+  );
+  return $content;
+}
+
 /**
  * Implements hook_civicrm_buildForm().
  *
