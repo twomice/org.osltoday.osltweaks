@@ -56,7 +56,7 @@ function osltweaks_civicrm_dashboard( $contactID, &$contentPlacement = self::DAS
  */
 function osltweaks_civicrm_buildForm($formName, &$form) {
   if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
-    $showCMS = CRM_Core_Smarty::singleton()->get_template_vars('showCMS');
+    $showCMS = CRM_Core_Smarty::singleton()->getTemplateVars('showCMS');
     if ($showCMS) {
       // On contribution pages where users would see cms-user-help section,
       // include some javascript to finagle the wording in that section.
