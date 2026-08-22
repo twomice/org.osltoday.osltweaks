@@ -18,7 +18,7 @@
   <version>1.4.2</version>
   <develStage>stable</develStage>
   <compatibility>
-    <ver>5.0</ver>
+    <ver>5.7</ver>
   </compatibility>
   <comments>Developed by Joinery for OSL.</comments>
   <classloader>
