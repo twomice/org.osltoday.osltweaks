@@ -64,7 +64,7 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
     }
 
     // Get extension settings.
-    $settings = CRM_Core_BAO_Setting::getItem(NULL, 'com.joineryhq.osltweaks');
+    $settings = Civi::settings()->get('com.joineryhq.osltweaks');
 
     // Check if contribution page id is match on the 'us_only_page_ids' setting;
     // if  so, make appropriate changes.
