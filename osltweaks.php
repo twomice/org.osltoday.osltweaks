@@ -5,7 +5,7 @@ use CRM_Osltweaks_ExtensionUtil as E;
 
 function osltweaks_civicrm_dashboard( $contactID, &$contentPlacement = self::DASHBOARD_BELOW ) {
   // Insert some HTML code which used to be in overridden templates, as found on the live site.
-  $content = array(
+  $content = [
     'CiviCRM Quick Links' => '
       <div>
         <div style="float:left" class="container1"> <ul class="indented">
@@ -45,7 +45,7 @@ function osltweaks_civicrm_dashboard( $contactID, &$contentPlacement = self::DAS
       <div class="clear"></div>
 
     ',
-  );
+  ];
   return $content;
 }
 
@@ -68,7 +68,7 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
 
     // Check if contribution page id is match on the 'us_only_page_ids' setting;
     // if  so, make appropriate changes.
-    if (in_array($form->_id, ($settings['us_only_page_ids'] ?? array()))) {
+    if (in_array($form->_id, ($settings['us_only_page_ids'] ?? []))) {
       if ($form->elementExists('country-1')) {
         // Remove non-US countries.
         $elCountry = $form->getElement('country-1');
@@ -94,7 +94,7 @@ function osltweaks_civicrm_buildForm($formName, &$form) {
     // If contribution page id exist in $settings['member_redirect_contribution_pages'] array,
     // and if we can get current contact id (user is logged in).
     if (
-      array_key_exists($form->_id, ($settings['member_redirect_contribution_pages'] ?? array()))
+      array_key_exists($form->_id, ($settings['member_redirect_contribution_pages'] ?? []))
       && $currentContactId = CRM_Core_Session::singleton()->getLoggedInContactID()
     ) {
       // Get memberships count base on the current contact id
